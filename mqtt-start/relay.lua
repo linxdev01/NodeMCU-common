@@ -5,12 +5,15 @@ local _init = 0;
 
 local function _relay(root,cmd) 
 	local path = "po/" .. (root) .. "/";
-	local pin = cfg.getV((path) .. "pin");
-	local state = cfg.getV((path) .. "state");
-	local enable = cfg.getV((path) .. "enable");
 
+	local pin = cfg.getV((path) .. "pin");
 	if pin == nil then return end
+
+	local enable = cfg.getV((path) .. "enable");
 	if enable == 0 then return end
+
+	local state = cfg.getV((path) .. "state");
+
 
 	if _init == 0 then
 		_init = 1
@@ -40,8 +43,7 @@ local function _relay(root,cmd)
 		end
 	end
 
-	cfg.setV((path) .. "state", state);
-	cfg.save();
+	cfg.setVs((path) .. "state", state);
 
 end
 

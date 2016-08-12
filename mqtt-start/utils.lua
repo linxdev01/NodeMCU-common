@@ -38,52 +38,27 @@ local function strsplit(delimiter, text)
   return list
 end
 
--- 08a4bef8-07c6-4697-8c7f-bab023538295
-
-local function newStack ()
-	return {""}   -- starts with an empty string
-end
-
-local function addString (stack, s)
-	table.insert(stack, s)    -- push 's' into the the stack
-	for i=#stack-1, 1, -1 do
-		if string.len(stack[i]) > string.len(stack[i+1]) then
-			break
-		end
-		stack[i] = stack[i] .. table.remove(stack)
-	end
-end
-
-local function get_rhex() 
-	return string.format("%02x", math.random(255));
-end
 
 local function gen_uuid() 
-	local s = newStack();
-	math.randomseed(tmr.now());
-	addString(s, get_rhex());
-	addString(s, get_rhex());
-	addString(s, get_rhex());
-	addString(s, get_rhex());
-	addString(s, "-");
-	addString(s, get_rhex());
-	addString(s, get_rhex());
-	addString(s, "-");
-	addString(s, get_rhex());
-	addString(s, get_rhex());
-	addString(s, "-");
-	addString(s, get_rhex());
-	addString(s, get_rhex());
-	addString(s, "-");
-	addString(s, table.concat( strsplit(":", wifi.sta.getmac()), ""));
-	return table.concat(s, "");
+	return dofile("utils/gen_uuid.lc").gen_uuid();
 end
 
+
+-- Merge tables with a being source  of "factory"
+-- b will receive what a has that it does not
+local function merge(a, b)
+	if type(a) == 'table' and type(b) == 'table' then
+		for k,v in pairs(b) do if type(v)=='table' and type(a[k] or false)=='table' then merge(a[k],v) else a[k]=v end end
+		end
+
+	return a
+end
 
 
 M = {
 	strjoin = strjoin,
 	strsplit = strsplit,
+	merge = merge,
 	gen_uuid = gen_uuid
 }
 end

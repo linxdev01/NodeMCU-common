@@ -2,24 +2,21 @@ local M
 do
 
 local function restart(m, data)
-	local _i = 2;
-	local _w = 0;
+	dofile("cmds/restart.lc").restart(m,data);
+end
 
-	if data ~= nil then _i = tonumber(data) end
+local function safe(v, r)
+	dofile("cmds/safe.lc").safe(v,r);
+end
 
-	if((_i == nil) or (_i < 2)) then _i = 2 end
-
-	i.set_state(-1, "Remote restart (" .. (_i) .. "s)");
-	dofile("mcfg.lc").send_msg(m, "Restarting (" .. (_i) .. "s)");
-	tmr.stop(6)
-	
-	tmr.alarm(6, (_i*1000), 0, function()
-		node.restart();
-	end)
+local function setcustom(v, r)
+	dofile("cmds/setcustom.lc").setcustom(v,r);
 end
 
 M = { 
-	restart = restart 
+	restart = restart,
+	setcustom = setcustom,
+	safe = safe	
 }
 end
 return M

@@ -1,9 +1,12 @@
-local module = {}
 
+local M
+do
 local _ap;
 local _pass;
 local _tries = 0;
 local _rec = 0;
+local _run = nil;
+
 
 local function wifi_wait_ip()  
 	
@@ -14,12 +17,10 @@ local function wifi_wait_ip()
 
   if _tries % 10 == 0 then
 	_rec  = _rec + 1;
-	_ap = cfg.getV("wifi/sta/" .. (_rec) .. "/ap");
-	_pass = cfg.getV("wifi/sta/" .. (_rec) .. "/pass");
+	_ap, _pass = cfg.getWifi(_rec);
 	if _ap == nil then
 		_rec  = _rec - 1;
-		_ap = cfg.getV("wifi/sta/" .. (_rec) .. "/ap");
-		_pass = cfg.getV("wifi/sta/" .. (_rec) .. "/pass");
+		_ap, _pass = cfg.getWifi(_rec);
 	end
 
 	-- We either have 1 or 1 is not even configured
@@ -48,9 +49,13 @@ local function wifi_wait_ip()
     i.say("MAC address is: " .. wifi.sta.getmac())
     i.say("IP is "..wifi.sta.getip())
     i.say("====================================")
+
     local status, err = pcall(function ()
-		app.start()
+		if _run ~= nil then _run() end
 	end)
+
+	if err ~= nil then print("ERR: " .. (err)) end
+
   end
 end
 
@@ -60,9 +65,17 @@ local function wifi_start()
 	tmr.alarm(1, 3000, 1, wifi_wait_ip)
 end
 
-function module.start()  
+local function start(val)  
+  _run = val
   i.say("Configuring Wifi ...")
+  wifi.sta.disconnect();
   wifi_start();
 end
 
-return module 
+M = {
+	start = start,
+	get_wifi = get_wifi
+}
+end
+return M
+

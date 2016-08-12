@@ -65,5 +65,10 @@ I'm also not even sure if what I am trying to do is a good idea
 on the NodeMCU.  Again, correction would be appreciated.
 
 
+Credits:
+
+I found the source I used to start
+
+http://www.foobarflies.io/a-simple-connected-object-with-nodemcu-and-mqtt/
 
 

@@ -1,3 +1,38 @@
 Thu Aug 11 23:25:11 UTC 2016
 	Found source for my start.  Added to README.md
 
+Fri Aug 12 21:04:18 UTC 2016
+	Many Changes
+	new files
+
+	I've been testing on this
+	--
+	NodeMCU custom build by frightanic.com
+	branch: master
+	commit: b580bfe79e6e73020c2bd7cd92a6afe01a8bc867
+	SSL: false
+	modules: cjson,dht,file,gpio,http,i2c,mdns,mqtt,net,node,pwm,sntp,tmr,uart,wifi
+	build	built on: 2016-07-15 17:21
+	powered by Lua 5.1.4 on SDK 1.5.1(e67da894)
+	--
+
+	Heap was very low.  I refactored to and was able to double free heap up to 12000.  
+	The addition of the logic to run custom.lc takes me down to 7000 avg.  Still better
+	than the 5000 before.  I need to revist that and see if how I can support an idea
+	of an application outside of my standard MQTT framework
+
+	Uploading some files is difficult due to low heap.  I created a safe mode.
+	safe.lua or main.lua is ran by init.lua based on config option of 'save'
+
+	In safe to go back:
+
+	-- Sets option and saves.
+	dofile("cfg.lc").setVs("save", 0)
+	-- restart
+	node.restart();
+
+	This kept me from having to delete init.lua, load up wifi, etc.
+	MQTT will force the unit in safe too.
+
+	Makefile has been added.  Addjust to your upload tool
+

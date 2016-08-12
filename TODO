@@ -1,0 +1,21 @@
+# IDEAS and Thoughts
+
+Fri Aug 12 21:16:17 UTC 2016
+	cfg.lua is the largest consumer of heap.  It would be possible to refactor
+	programs to use dofile("cfg.lc").getV,setVs, .. to free this space.  Downside
+	is that loading data.txt consumes about .5s of time.  Each getV would consume
+	that.  
+
+	1. Don't redundantly get the same setting.  
+
+	This requires a set, save, and restart process.
+
+	2. For power state, don't read the config when publishing relay state
+
+	Create a global variable and set it.  The mqtt/publish.lu can use that.
+	relay.lua can do the setVs and set the global.
+
+	3.  For some items send back the table.
+
+	"rgb/1/XXX".  Instead of a dofile for each pin, led gets the "rgb/1" table.
+	"wifi/sta/1/XXX".  Same idea

@@ -9,19 +9,18 @@ setup = nil
 led = nil
 _stop = 0
 
+p_start = tmr.time();
+
 function main()
-	setup = require("setup")
-	cfg = dofile("cfg.lc");
-	cfg.load();
 
-
+	wifi.setmode(wifi.STATION);
+	wifi.sta.config("K4FH/UNIFI", nil);
+	wifi.sta.connect()
 	dofile("telnet.lc").start();
 
-	i = require("indicator");
-	i.start();
-	i.set_state(-1, nil);
+    dofile("led.lc").color("purple");
+	print("Started.");
 
-	setup.start()  
 end
 
 print ("Will start in 10(s)");

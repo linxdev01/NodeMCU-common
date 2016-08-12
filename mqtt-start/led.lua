@@ -20,6 +20,11 @@ local _colors = {
 	["white"]   = {255, 255, 255}
 };
 
+local function _getV(name)
+	if cfg ~= nil then return cfg.getV(name) end
+	return dofile("cfg.lc").getV(name);
+end
+
 
 -- sanity wrapper
 local function _set(pin, val) 
@@ -33,30 +38,35 @@ local function _set(pin, val)
 	end
 end
 
+
 local function getPin(rec, color)
-	return cfg.getV("rgb/" .. (rec) .. "/" .. (color));
+	local _p =  _getV("rgb/" .. (rec) .. "/" .. (color));
+	if _p == nil then return -1 end
+	return _p
 end
 
 local function _setup()
+	if _rec == 0 then _rec = 1 end
 
-
-	if getPin(_rec, 'r') ~= nil then
-		_r =  getPin(_rec, 'r')
+	_r = getPin(_rec, 'r')
+	if _r  ~= -1 then
 		pwm.setup(_r, dutyCycle, dutyMax);
 		pwm.start(_r);
 	end
+		
 
-	if getPin(_rec, 'g') ~= nil then
-		_g =  getPin(_rec, 'g')
+	_g =  getPin(_rec, 'g')
+	if _g ~= -1 then
 		pwm.setup(_g, dutyCycle, dutyMax);
 		pwm.start(_g);
 	end
 
-	if getPin(_rec, 'b') ~= nil then
-		_b =  getPin(_rec, 'b')
+	_b =  getPin(_rec, 'b')
+	if _b ~= -1 then
 		pwm.setup(_b, dutyCycle, dutyMax);
 		pwm.start(_b);
 	end
+
 
 end
 
